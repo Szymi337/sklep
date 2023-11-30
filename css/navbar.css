@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto&display=swap');
+
+.navbar {
+    width: 100%;
+
+    border-bottom: 1px solid black;
+    background-color: white;
+
+    position: relative;
+
+    max-width: 768px;
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: row;
+
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 8px;
+}
+
+.navbar-brand {
+    font-size: 28px;
+    line-height: 36px;
+}
+
+.navbar-trigger {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: black;
+
+    width: 28px;
+    aspect-ratio: 1/1;
+}
+
+.navbar-items {
+    display: none;
+
+    position: absolute;
+    top: 100%;
+    left: 0;
+
+    border-bottom: 1px solid black;
+}
+
+.navbar-items-active {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.navbar-item {
+    font-size: 20px;
+    line-height: 28px;
+
+    padding: 8px 12px;
+    border-top: 1px solid black;
+}
+
+@media (min-width: 768px) {
+    .navbar-items {
+        display: flex;
+    }
+
+    .navbar-items {
+        position: static;
+        border: 0;
+    }
+
+    .navbar-item {
+        border: 0;
+    }
+
+    .navbar-trigger {
+        display: none;
+    }
+
+    .navbar-items-active {
+        flex-direction: row;
+        width: auto;
+    }
+}
