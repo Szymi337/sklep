@@ -26,3 +26,18 @@ body > .container > .content {
 .success {
     color: green;
 }
+
+.table {
+    width: 100%;
+}
+
+.text-centered {
+    text-align: center;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px;
+}

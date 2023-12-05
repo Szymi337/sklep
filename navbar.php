@@ -7,6 +7,15 @@
             <a href="/login.php" class="navbar-item">Logowanie</a>
             <a href="/register.php" class="navbar-item">Rejestracja</a>
         <?php else: ?>
+            <div class="dropdown">
+                <div class="navbar-item">Zarządzanie</div>
+                <div class="dropdown-items">
+                    <a href="/admin/products.php" class="navbar-item">Zarządzanie produktami</a>
+                    <a href="/admin/categories.php" class="navbar-item">Zarządzanie kategoriami</a>
+                    <a href="/admin/payment-methods.php" class="navbar-item">Zarządzanie sposobami płatności</a>
+                    <a href="/admin/delivery-methods.php" class="navbar-item">Zarządzanie sposobami wysyłki</a>
+                </div>
+            </div>
             <a href="/logout.php" class="navbar-item">Wyloguj</a>
         <?php endif; ?>
     </div>

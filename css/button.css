@@ -8,6 +8,17 @@
     padding: 4px 20px;
     color: black;
     border-radius: 4px;
+
+    background-color: darkgray;
+    cursor: pointer;
+}
+
+.btn-yellow {
+    background-color: lightyellow;
+}
+
+.btn-red {
+    background-color: indianred;
 }
 
 .btn-container {
