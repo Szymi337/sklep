@@ -8,7 +8,7 @@
 
     position: relative;
 
-    max-width: 768px;
+    max-width: 1080px;
     margin: 0 auto;
 
     display: flex;
@@ -21,6 +21,7 @@
 }
 
 .navbar-brand {
+    font-weight: 700;
     font-size: 28px;
     line-height: 36px;
 }

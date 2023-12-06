@@ -3,3 +3,10 @@
     flex-direction: column;
     gap: 4px;
 }
+
+.input-container-radio {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    align-items: center;
+}

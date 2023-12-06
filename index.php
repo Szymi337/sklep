@@ -4,7 +4,7 @@ session_start();
 
 $db = require "database.php";
 
-$stmt = $db->prepare('SELECT * FROM products');
+$stmt = $db->prepare('SELECT * FROM products WHERE is_deleted = 0');
 $stmt->execute();
 
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -74,7 +74,7 @@ $products = array_map(function ($product) {
             <div class="product-card">
 
                 <div class="product-card-image"
-                     style="background-image: url('<?= $product['image'] ?>');">
+                     style="background-image: url('/images/<?= $product['image'] ?>');">
                 </div>
 
                 <div class="product-details">
@@ -89,7 +89,7 @@ $products = array_map(function ($product) {
                     </div>
 
                     <div class="btn-container">
-                        <a class="btn" href="/product.php?id=<?= $product['id'] ?>">Szczegóły</a>
+                        <a class="btn btn-green" href="/cart/add.php?id=<?= $product['id'] ?>">Dodaj do koszyka</a>
                     </div>
                 </div>
             </div>

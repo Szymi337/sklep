@@ -6,10 +6,11 @@ $stmt->execute();
 $customPages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <div class="navbar">
-    <h1 class="navbar-brand">Hiperventilation</h1>
+    <a class="navbar-brand" href="/">Hiperventilation</a>
 
     <div class="navbar-items" navbar-items>
         <a href="/index.php" class="navbar-item">Strona główna</a>
+        <a href="/cart/index.php" class="navbar-item">Koszyk</a>
         <?php if (!isset($_SESSION['user_id'])): ?>
             <a href="/login.php" class="navbar-item">Logowanie</a>
             <a href="/register.php" class="navbar-item">Rejestracja</a>
