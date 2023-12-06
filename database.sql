@@ -41,3 +41,9 @@ CREATE TABLE delivery_methods
     price      DECIMAL(6, 2) NOT NULL,
     is_deleted boolean       NOT NULL DEFAULT FALSE
 );
+
+CREATE TABLE custom_pages (
+    id         INT          NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    name       VARCHAR(255) NOT NULL,
+    content    TEXT         NOT NULL
+);

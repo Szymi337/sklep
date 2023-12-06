@@ -1,3 +1,10 @@
+<?php
+$db = require __DIR__ . '/database.php';
+$stmt = $db->prepare('SELECT * FROM custom_pages');
+$stmt->execute();
+
+$customPages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
 <div class="navbar">
     <h1 class="navbar-brand">Hiperventilation</h1>
 
@@ -14,10 +21,17 @@
                     <a href="/admin/categories.php" class="navbar-item">Zarządzanie kategoriami</a>
                     <a href="/admin/payment-methods.php" class="navbar-item">Zarządzanie sposobami płatności</a>
                     <a href="/admin/delivery-methods.php" class="navbar-item">Zarządzanie sposobami wysyłki</a>
+                    <a href="/admin/custom-pages.php" class="navbar-item">Zarządzanie stronami</a>
+                    <a href="/admin/users.php" class="navbar-item">Zarządzanie użytkownikami</a>
                 </div>
             </div>
             <a href="/logout.php" class="navbar-item">Wyloguj</a>
         <?php endif; ?>
+
+        <?php foreach ($customPages as $page): ?>
+            <a href="/custom-page.php?<?= http_build_query(['id' => $page['id']]) ?>"
+               class="navbar-item"><?= htmlspecialchars($page['name']) ?></a>
+        <?php endforeach; ?>
     </div>
 
     <div class="navbar-trigger" navbar-trigger>
