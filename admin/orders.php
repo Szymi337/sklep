@@ -3,14 +3,29 @@
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /login.php');
+    header("Location: ../index.php");
+    die();
+}
+
+$db = require "../database.php";
+$stmt = $db->prepare("SELECT * FROM users WHERE id = :id");
+$stmt->execute(['id' => $_SESSION['user_id']]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$user) {
+    header("Location: ../index.php");
+    die();
+}
+
+if ($user['is_admin'] !== 1) {
+    header("Location: ../index.php");
     die();
 }
 
 $db = require "../database.php";
 
-$stmt = $db->prepare('SELECT * FROM orders WHERE user_id = :user_id AND is_deleted = 0');
-$stmt->execute(['user_id' => $_SESSION['user_id']]);
+$stmt = $db->prepare('SELECT * FROM orders WHERE is_deleted = 0');
+$stmt->execute();
 
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

@@ -24,9 +24,8 @@ if ($user['is_admin'] !== 1) {
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $oldInput = [
-        'name' => $_POST['name'] ?? '',
+        'username' => $_POST['username'] ?? '',
         'email' => $_POST['email'] ?? '',
-        'is_admin' => $_POST['is_admin'] ?? '',
     ];
 
     if (!is_string($_POST['username'] ?? null)) {
@@ -75,54 +74,38 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         die();
     }
 
-    if (!is_string($_POST['is_admin'] ?? null)) {
-        header("Location: /admin/create-user.php?" . http_build_query([
-                'error' => 'Uzupełnij wszystkie pola.', ...$oldInput
-            ]));
-        die();
-    }
-
-    $is_admin = trim($_POST['is_admin']);
-
-    if ($is_admin !== '' && $is_admin !== 'on') {
-        header("Location: /admin/create-user.php?" . http_build_query([
-                'error' => 'Niepoprawna wartość pola "Admin".', ...$oldInput
-            ]));
-        die();
-    }
-
     if (!is_string($_POST['password']) || strlen($_POST['password']) < 8) {
-        header("Location: /register.php?" . http_build_query(['error' => 'Hasło musi mieć minimum 8 znaków.', ...$oldInput]));
+        header("Location: /admin/create-user.php?" . http_build_query(['error' => 'Hasło musi mieć minimum 8 znaków.', ...$oldInput]));
         die();
     }
 
     if (!preg_match('/[A-Z]/', $_POST['password'])) {
-        header("Location: /register.php?" . http_build_query(['error' => 'Hasło musi zawierać przynajmniej jedną wielką literę.', ...$oldInput]));
+        header("Location: /admin/create-user.php?" . http_build_query(['error' => 'Hasło musi zawierać przynajmniej jedną wielką literę.', ...$oldInput]));
         die();
     }
 
     if (!preg_match('/[a-z]/', $_POST['password'])) {
-        header("Location: /register.php?" . http_build_query(['error' => 'Hasło musi zawierać przynajmniej jedną małą literę.', ...$oldInput]));
+        header("Location: /admin/create-user.php?" . http_build_query(['error' => 'Hasło musi zawierać przynajmniej jedną małą literę.', ...$oldInput]));
         die();
     }
 
     if (!preg_match('/[0-9]/', $_POST['password'])) {
-        header("Location: /register.php?" . http_build_query(['error' => 'Hasło musi zawierać przynajmniej jedną cyfrę.', ...$oldInput]));
+        header("Location: /admin/create-user.php?" . http_build_query(['error' => 'Hasło musi zawierać przynajmniej jedną cyfrę.', ...$oldInput]));
         die();
     }
 
     if (!preg_match('/[!@#$%^&*()\-_=+{};:,<.>]/', $_POST['password'])) {
-        header("Location: /register.php?" . http_build_query(['error' => 'Hasło musi zawierać przynajmniej jeden znak specjalny.', ...$oldInput]));
+        header("Location: /admin/create-user.php?" . http_build_query(['error' => 'Hasło musi zawierać przynajmniej jeden znak specjalny.', ...$oldInput]));
         die();
     }
 
     if (strlen($_POST['password']) > 32) {
-        header("Location: /register.php?" . http_build_query(['error' => "Hasło nie może być dłuższe niż 32 znaki.", ...$oldInput]));
+        header("Location: /admin/create-user.php?" . http_build_query(['error' => "Hasło nie może być dłuższe niż 32 znaki.", ...$oldInput]));
         die();
     }
 
-    $stmt = $db->prepare("SELECT * FROM users WHERE username = :username");
-    $stmt->execute(['username' => $username]);
+    $stmt = $db->prepare("SELECT * FROM users WHERE login = :login");
+    $stmt->execute(['login' => $username]);
 
     if ($stmt->fetch(PDO::FETCH_ASSOC)) {
         header("Location: /admin/create-user.php?" . http_build_query([
@@ -141,12 +124,12 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         die();
     }
 
-    $stmt = $db->prepare("INSERT INTO users (username, email, is_admin) VALUES (:username, :email, :is_admin)");
+    $stmt = $db->prepare("INSERT INTO users (login, email, password, is_admin) VALUES (:login, :email, :password, :is_admin)");
     $stmt->execute([
-        'username' => $username,
+        'login' => $username,
         'email' => $email,
         'password' => password_hash(trim($_POST['password']), PASSWORD_BCRYPT),
-        'is_admin' => $is_admin === 'on' ? 1 : 0,
+        'is_admin' => 1
     ]);
 
     header("Location: /admin/users.php?" . http_build_query([
@@ -174,24 +157,27 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     <?php require "../navbar.php"; ?>
 
     <form method="POST" action="<?= htmlspecialchars($_SERVER['REQUEST_URI']) ?>" class="content form">
-        <h2>Dodaj nową stronę</h2>
+        <h2>Dodaj pracownika</h2>
 
         <?php if (isset($_GET['error'])): ?>
             <div class="error">
-                <?= htmlspecialchars($_GET['error']) ?>
+                <?= $_GET['error'] ?>
             </div>
         <?php endif; ?>
 
         <div class="input-container">
-            <label for="name">Nazwa</label>
-            <input type="text" id="name" name="name"
-                   value="<?= htmlspecialchars($_GET['name'] ?? '') ?>"/>
+            <label for="username">Nazwa użytkownika</label>
+            <input type="text" name="username" id="username" value="<?= htmlspecialchars($_GET['username'] ?? '') ?>">
         </div>
 
         <div class="input-container">
-            <label for="content">Treść</label>
-            <textarea id="content" name="content" cols="30"
-                      rows="10"><?= htmlspecialchars($_GET['content'] ?? '') ?></textarea>
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email" value="<?= htmlspecialchars($_GET['email'] ?? '') ?>">
+        </div>
+
+        <div class="input-container">
+            <label for="password">Hasło</label>
+            <input type="password" name="password" id="password">
         </div>
 
         <div class="btn-container">

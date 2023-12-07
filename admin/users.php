@@ -23,6 +23,7 @@ if ($user['is_admin'] !== 1) {
 }
 
 $stmt = $db->prepare('SELECT * FROM users');
+$stmt->execute();
 
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -44,7 +45,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <div class="container">
     <?php require "../navbar.php"; ?>
 
-    <div class="content">
+    <div class="content form">
         <?php if (isset($_GET['success'])): ?>
             <div class="success">
                 <?= htmlspecialchars($_GET['success']) ?>
@@ -52,31 +53,33 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php endif; ?>
 
         <?php if (count($users) > 0): ?>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Nazwa</th>
-                    <th>Akcje</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($users as $user): ?>
-                    <tr class="product-card">
-                        <td class="product-card-title"><?= $user['name'] ?></td>
-                        <td class="btn-container">
-                            <a class="btn btn-red"
-                               href="/admin/delete-user.php?<?= http_build_query(['id' => $user['id']]) ?>">
-                                Usuń
-                            </a>
-                            <a class="btn btn-yellow"
-                               href="/admin/edit-user.php?<?= http_build_query(['id' => $user['id']]) ?>">
-                                Edytuj
-                            </a>
-                        </td>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Nazwa</th>
+                        <th>Email</th>
+                        <th>Admin</th>
+                        <th>Akcje</th>
                     </tr>
-                <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($users as $user): ?>
+                        <tr>
+                            <td><?= $user['login'] ?></td>
+                            <td><?= $user['email'] ?></td>
+                            <td><?= $user['is_admin'] ? 'Tak' : 'Nie' ?></td>
+                            <td class="btn-container">
+                                <a class="btn btn-red"
+                                   href="/admin/delete-user.php?<?= http_build_query(['id' => $user['id']]) ?>">
+                                    Usuń
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         <?php else: ?>
             <div class="text-centered">
                 Brak stron

@@ -4,6 +4,14 @@ $stmt = $db->prepare('SELECT * FROM custom_pages');
 $stmt->execute();
 
 $customPages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$user = null;
+if (isset($_SESSION['user_id'])) {
+    $stmt = $db->prepare('SELECT * FROM users WHERE id = :id');
+    $stmt->execute(['id' => $_SESSION['user_id']]);
+
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+}
 ?>
 <div class="navbar">
     <a class="navbar-brand" href="/">Hiperventilation</a>
@@ -11,7 +19,7 @@ $customPages = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="navbar-items" navbar-items>
         <a href="/index.php" class="navbar-item">Strona główna</a>
         <a href="/cart/index.php" class="navbar-item">Koszyk</a>
-        <?php if (!isset($_SESSION['user_id'])): ?>
+        <?php if ($user === null): ?>
             <a href="/login.php" class="navbar-item">Logowanie</a>
             <a href="/register.php" class="navbar-item">Rejestracja</a>
         <?php else: ?>
@@ -25,17 +33,20 @@ $customPages = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
 
-            <div class="dropdown">
-                <div class="navbar-item">Zarządzanie</div>
-                <div class="dropdown-items">
-                    <a href="/admin/products.php" class="navbar-item">Zarządzanie produktami</a>
-                    <a href="/admin/categories.php" class="navbar-item">Zarządzanie kategoriami</a>
-                    <a href="/admin/payment-methods.php" class="navbar-item">Zarządzanie sposobami płatności</a>
-                    <a href="/admin/delivery-methods.php" class="navbar-item">Zarządzanie sposobami wysyłki</a>
-                    <a href="/admin/custom-pages.php" class="navbar-item">Zarządzanie stronami</a>
-                    <a href="/admin/users.php" class="navbar-item">Zarządzanie użytkownikami</a>
+            <?php if ($user['is_admin']): ?>
+                <div class="dropdown">
+                    <div class="navbar-item">Zarządzanie</div>
+                    <div class="dropdown-items">
+                        <a href="/admin/products.php" class="navbar-item">Zarządzanie produktami</a>
+                        <a href="/admin/categories.php" class="navbar-item">Zarządzanie kategoriami</a>
+                        <a href="/admin/payment-methods.php" class="navbar-item">Zarządzanie sposobami płatności</a>
+                        <a href="/admin/delivery-methods.php" class="navbar-item">Zarządzanie sposobami wysyłki</a>
+                        <a href="/admin/custom-pages.php" class="navbar-item">Zarządzanie stronami</a>
+                        <a href="/admin/users.php" class="navbar-item">Zarządzanie użytkownikami</a>
+                        <a href="/admin/orders.php" class="navbar-item">Zarządzanie zamówieniami</a>
+                    </div>
                 </div>
-            </div>
+            <?php endif; ?>
             <a href="/logout.php" class="navbar-item">Wyloguj</a>
         <?php endif; ?>
 
