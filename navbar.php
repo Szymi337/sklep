@@ -16,6 +16,16 @@ $customPages = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <a href="/register.php" class="navbar-item">Rejestracja</a>
         <?php else: ?>
             <div class="dropdown">
+                <div class="navbar-item">Konto</div>
+                <div class="dropdown-items">
+                    <a href="/client/change-data.php" class="navbar-item">Zmiana danych</a>
+                    <a href="/client/change-password.php" class="navbar-item">Zmiana hasła</a>
+                    <a href="/client/orders.php" class="navbar-item">Zamówienia</a>
+                    <a href="/client/addresses.php" class="navbar-item">Adresy</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
                 <div class="navbar-item">Zarządzanie</div>
                 <div class="dropdown-items">
                     <a href="/admin/products.php" class="navbar-item">Zarządzanie produktami</a>
